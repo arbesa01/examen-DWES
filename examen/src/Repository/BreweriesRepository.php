@@ -33,6 +33,16 @@ class BreweriesRepository extends ServiceEntityRepository
         $this->save($brewery, true);
     }
 
+    public function update(array $data, int $id): void
+    {
+        $brewery = $this->find($id);
+        $brewery
+            ->setName($data['name'])
+            ->setCity($data['city'])
+            ->setState($data['state']);
+        $this->save($brewery, true);
+    }
+
     public function save(Breweries $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);

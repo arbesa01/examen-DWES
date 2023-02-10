@@ -18,12 +18,15 @@ class CrudController extends AbstractController
     public function insert(EntityManagerInterface $em, Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        $allId = $em->getRepository(Breweries::class)->findAll();
-        $incrementedId = $allId[count($allId) - 1]->getId();
+        $allBreweriesId = $em->getRepository(Breweries::class)->findAll();
+        $incrementedBreweryId = $allBreweriesId[count($allBreweriesId) - 1]->getId();
+
+        $allBeersId = $em->getRepository(Beers::class)->findAll();
+        $incrementedBeerId = $allBeersId[count($allBeersId) - 1]->getId();
 
         $toCamelCase = [];
 
-        if(isset($data['INIT_BEER'])){
+        if (isset($data['INIT_BEER'])) {
             $toCamelCase = [
                 'name' => $data['NAME'],
                 'city' => $data['CITY'],
@@ -36,27 +39,33 @@ class CrudController extends AbstractController
                     'ounces' => $data['INIT_BEER']["OUNCES"]
                 ]
             ];
-            // $em->getRepository(Beers::class)->insert($toCamelCase['initBeer']);
-        }else{
+            $em->getRepository(Breweries::class)->insert($toCamelCase, $incrementedBreweryId);
+            $em->getRepository(Beers::class)->insert($toCamelCase['initBeer'], $incrementedBeerId, $incrementedBreweryId);
+            return $this->json(['MESSAGE' => "Brewery " . $toCamelCase['name'] . " inserted succesfully, with " . $toCamelCase['initBeer']['name'] . " as his initial beer"]);
+        } else {
             $toCamelCase = [
                 'name' => $data['NAME'],
                 'city' => $data['CITY'],
                 'state' => $data['STATE']
             ];
+            $em->getRepository(Breweries::class)->insert($toCamelCase, $incrementedBreweryId);
+            return $this->json(['MESSAGE' => "Brewery " . $toCamelCase['name'] . " inserted succesfully"]);
         }
-        
-        $em->getRepository(Breweries::class)->insert($toCamelCase, $incrementedId);
-        return $this->json(['MESSAGE' => "Brewery " . $toCamelCase['name'] . " inserted succesfully"]);
-        // return $this->json($data);
     }
 
-    // #[Route('/update/{id}', name: 'registration_update', methods: ['PUT'])]
-    // public function update(int $id, EntityManagerInterface $entityManager, Request $request): JsonResponse
-    // {
-    //     $data = json_decode($request->getContent(), true);
-    //     $entityManager->getRepository(Registration::class)->update($id, $data);
-    //     return $this->json(['MESSAGE' => "Registro " . $data["courseId"] . " modificado exitosamente"]);
-    // }
+    #[Route('/breweries/{id}', name: 'brewery_update', methods: ['PUT'])]
+    public function update(int $id, EntityManagerInterface $em, Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $toCamelCase = [];
+        $toCamelCase = [
+            'name' => $data['NAME'],
+            'city' => $data['CITY'],
+            'state' => $data['STATE']
+        ];
+        $em->getRepository(Breweries::class)->update($toCamelCase, $id);
+        return $this->json(['MESSAGE' => "Brewery " . $toCamelCase['name'] . " updated succesfully"]);
+    }
 
     // #[Route('/delete/{id}', name: 'student_delete', methods: ['DELETE'])]
     // public function delete(int $id, EntityManagerInterface $em): JsonResponse
@@ -64,49 +73,5 @@ class CrudController extends AbstractController
     //     $student = $em->getRepository(Student::class);
     //     $student->delete($id);
     //     return $this->json(['MESSAGE' => "Estudiante " . $id . " eliminado exitosamente"]);
-    // }
-
-    // #[Route('/breweries', name: 'registrations', methods: ['GET'])]
-    // public function all(EntityManagerInterface $em): JsonResponse
-    // {
-    //     $results = $em->getRepository(Registration::class)->findAll();
-    //     $data = [];
-    //     foreach ($results as $regis) {
-    //         $data[] = [
-    //             'COURSE_ID' => $regis->getCourseId(),
-    //             'STUDENT' => [
-    //                 'ID' => $regis->getStudentId()->getStudentId(),
-    //                 'RANK' => $regis->getStudentId()->getRanking()
-    //             ],
-    //             'GRADE' => $regis->getGrade(),
-    //             'SAT' => $regis->getSat()
-    //         ];
-    //     }
-    //     return $this->json($data);
-    // }
-
-    // #[Route('/student/{id}', name: 'student', methods: ['GET'])]
-    // public function single(int $id, EntityManagerInterface $em): JsonResponse
-    // {
-    //     $student = $em->getRepository(Student::class)->find($id);
-    //     $registrations = $em->getRepository(Registration::class)->findBy(["studentId" => $id]);
-    //     $arrayRegistros = [];
-    //     for ($i = 0; $i < count($registrations); $i++) {
-    //         $arrayRegistros += [
-    //             'REGISTRO ' . ($i + 1) => [
-    //                 'ID' => $registrations[$i]->getCourseId(),
-    //                 'GRADE' => $registrations[$i]->getGrade()
-    //             ]
-    //         ];
-    //     }
-    //     $data[] = [
-    //         'STUDENT_ID' => $student->getStudentId(),
-    //         'INTELLIGENCE' => $student->getIntelligence(),
-    //         'RANKING' => $student->getRanking(),
-    //         'REGISTROS_ASOCIADOS' => $arrayRegistros
-    //     ];
-
-
-    //     return $this->json($data);
     // }
 }
