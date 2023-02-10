@@ -1,0 +1,69 @@
+{% extends "layout.html.twig" %}
+{% block content %}
+    <div class="inside">
+        <h2>Our Breweries</h2>
+        <div class="box">
+            <div class="left-top-corner">
+                <div class="right-top-corner">
+                    <div class="border-top"></div>
+                </div>
+            </div>
+            <div class="xcontent">
+                <div class="border-left">
+                    <div class="border-right">
+                        <div class="inner1">
+                            <table>
+                            {# Cálculo de valores para la paginación #}
+                            {% set elementsPerPage = 25 %}
+                            {% set lowerLimit = (page -1) * elementsPerPage + 1 %}
+                            {% set upperLimit = page * elementsPerPage %}
+
+                            {# List de las cervecerías paginado #}
+                            {% for breweries in data|sort((a, b) => a.getState() <=> b.getState()) %}
+                                {% if loop.index >= lowerLimit and loop.index <= upperLimit %}
+                                    <tr>
+                                        <td>
+                                        {# <a href='#'> {{breweries.getName()}}</a> #}
+                                            <a href='{{ path('app_detail',{'id':breweries.getId()}) }}'> {{breweries.getName()}} </a>, {{breweries.getCity()}} ( {{breweries.getState()}} )
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            </table>
+
+                            {# botones de paginación #}
+                            {% set totalPages = (((data|length)/elementsPerPage)|round(0, 'ceil')) %}
+                            {% if page > 1 %}
+                                <a href="{{ path('app_breweries',{'page':1}) }}">&lt;&lt;</a>
+                                <a href="{{ path('app_breweries',{'page':page - 1}) }}">&lt;</a>
+                            {% else %}
+                                <span>&lt;&lt;</span>
+                                <span>&lt;</span>
+                            {% endif %}
+                            {% for pageButton in 1..totalPages %}
+                                {% if pageButton == page%}
+                                    <span>{{ pageButton }}</span>
+                                {% else %}
+                                    <a href="{{ path('app_breweries',{'page':pageButton}) }}">{{ pageButton }}</a>
+                                {% endif %}
+                            {% endfor %}
+                            {% if page < totalPages %}
+                                <a href="{{ path('app_breweries',{'page':page + 1}) }}">&gt;</a>
+                                <a href="{{ path('app_breweries',{'page':totalPages}) }}">&gt;&gt;</a>
+                            {% else %}
+                                <span>&gt;</span>
+                                <span>&gt;&gt;</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="left-bot-corner">
+                <div class="right-bot-corner">
+                <div class="border-bot"></div>
+                </div>
+            </div>
+        </div>
+      </div>
+{% endblock %}
+

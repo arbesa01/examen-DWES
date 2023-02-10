@@ -1,0 +1,33 @@
+{% extends "base.html.twig" %}
+{% block layout %}
+    <div class="body-bg wrap">
+  <header>
+    <div class="container">
+      <h1><a href="index.html">Brewery</a></h1>
+      <nav>
+        <ul>
+          <li class="current"><a href="{{ path('app_main') }}"><span>Home</span></a></li>
+          <li><a href="{{ path('app_breweries') }}"><span>Breweries</span></a></li>
+        </ul>
+      </nav>
+      <div class="indent">
+        <p><strong>Egetac</strong> fring estas pellent sempus ametuer torta orci id justo scelerit. Adipisciniacongue ac semper fauctortortorta morbi urna lobortor loborta pulvinaretium eros platea.</p>
+        <p>Telluseger morbi consequam non sus masse dolorem tur in tor cursus. Pretiumdiam eu nulla ligula et mauristibulum sollis maurisque at pulvinaretium morbi.</p>
+      </div>
+    </div>
+  </header>
+  <section id="content">
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+  </section>
+</div>
+<footer>
+  <div class="footerlink">
+    <p class="lf">Copyright &copy; 2010 <a href="#">SiteName</a> - All Rights Reserved</p>
+    <p class="rf">Design by <a href="http://www.templatemonster.com/">TemplateMonster</a></p>
+    <div style="clear:both;"></div>
+  </div>
+</footer>
+<script type="text/javascript"> Cufon.now(); </script>
+{% endblock %}

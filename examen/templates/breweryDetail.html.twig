@@ -1,0 +1,60 @@
+{% extends "layout.html.twig" %}
+{% block content %}
+        <div class="inside">
+        <h2>{{breweryData.getName()}} Brewery's beers</h2>
+        <div class="box">
+            <div class="left-top-corner">
+                <div class="right-top-corner">
+                    <div class="border-top"></div>
+                </div>
+            </div>
+            <div class="xcontent">
+                <div class="border-left">
+                    <div class="border-right">
+                        <div class="inner1">
+                            <h1></h1>
+                            <ul>
+                            {% for beers in beerData %}
+                                <li>
+                                
+                                <b>{{beers.getName()}}</b>, 
+
+                                {{beers.getStyle()}} Style, 
+
+                                {# Gestionando la nulabilidad de ABV #}
+                                {% if beers.getAbv() is null %}
+                                    --.- ,
+                                {% else %}
+                                    {{beers.getAbv() * 100}}% ABV ,
+                                {% endif %}
+
+                                {# Gestionando la nulabilidad de IBU #}
+                                {% if beers.getIbu() is null %}
+                                    --.- ,
+                                {% else %}
+                                    {{beers.getIbu()}} IBU ,
+                                {% endif %}
+
+                                {{beers.getOunces()}} Oz.
+
+                               </li>
+                            {% endfor %}                                
+                                {# <li>Contact: {% if data.getReprCod() is null %}
+                                                Sin representante
+                                            {% else %}
+                                                {{data.getReprCod().getApellidos()}}
+                                            {% endif %}
+                                </li> #}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="left-bot-corner">
+                <div class="right-bot-corner">
+                <div class="border-bot"></div>
+                </div>
+            </div>
+        </div>
+      </div>
+{% endblock %}
