@@ -23,7 +23,6 @@
                                 {% if loop.index >= lowerLimit and loop.index <= upperLimit %}
                                     <tr>
                                         <td>
-                                        {# <a href='#'> {{breweries.getName()}}</a> #}
                                             <a href='{{ path('app_detail',{'id':breweries.getId()}) }}'> {{breweries.getName()}} </a>, {{breweries.getCity()}} ( {{breweries.getState()}} )
                                         </td>
                                     </tr>

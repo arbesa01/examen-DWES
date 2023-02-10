@@ -14,37 +14,34 @@
                         <div class="inner1">
                             <h1></h1>
                             <ul>
-                            {% for beers in beerData %}
-                                <li>
-                                
-                                <b>{{beers.getName()}}</b>, 
+                                {% for beers in beerData %}
+                                    <li>
+                                        <b>{{beers.getName()}}</b>, 
 
-                                {{beers.getStyle()}} Style, 
+                                        {# Gestionando la nulabilidad de Style #}
+                                        {% if beers.getAbv() is null %}
+                                            "Unknown",
+                                        {% else %}
+                                            {{beers.getStyle()}} Style,
+                                        {% endif %}
 
-                                {# Gestionando la nulabilidad de ABV #}
-                                {% if beers.getAbv() is null %}
-                                    --.- ,
-                                {% else %}
-                                    {{beers.getAbv() * 100}}% ABV ,
-                                {% endif %}
+                                        {# Gestionando la nulabilidad de ABV #}
+                                        {% if beers.getAbv() is null %}
+                                            --.-,
+                                        {% else %}
+                                            {{beers.getAbv() * 100}}% ABV,
+                                        {% endif %}
 
-                                {# Gestionando la nulabilidad de IBU #}
-                                {% if beers.getIbu() is null %}
-                                    --.- ,
-                                {% else %}
-                                    {{beers.getIbu()}} IBU ,
-                                {% endif %}
+                                        {# Gestionando la nulabilidad de IBU #}
+                                        {% if beers.getIbu() is null %}
+                                            --.-,
+                                        {% else %}
+                                            {{beers.getIbu()}} IBU,
+                                        {% endif %}
 
-                                {{beers.getOunces()}} Oz.
-
-                               </li>
-                            {% endfor %}                                
-                                {# <li>Contact: {% if data.getReprCod() is null %}
-                                                Sin representante
-                                            {% else %}
-                                                {{data.getReprCod().getApellidos()}}
-                                            {% endif %}
-                                </li> #}
+                                        {{beers.getOunces()}} Oz.
+                                    </li>
+                                {% endfor %}                                
                             </ul>
                         </div>
                     </div>

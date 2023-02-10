@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Breweries;
+use App\Entity\Beers;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,6 +20,17 @@ class BreweriesRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Breweries::class);
+    }
+
+    public function insert(array $data, int $lastId): void
+    {
+        $brewery = new Breweries;
+        $brewery
+            ->setId($lastId + 1)
+            ->setName($data['name'])
+            ->setCity($data['city'])
+            ->setState($data['state']);
+        $this->save($brewery, true);
     }
 
     public function save(Breweries $entity, bool $flush = false): void
