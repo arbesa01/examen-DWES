@@ -20,12 +20,23 @@ class CrudController extends AbstractController
         ]);
     }
 
+
+    // Función que renderiza el twig 'breweries.html', cuya estructura se basa en un listado de las cervecerías registradas en base de datos. Junto con un parámetro opcional, ya que especificamos que podrá ser nulo, referenciando a la última página del paginado que el usuario ha visitado.
+    // Esta página se renderizará con la ruta '/breweries'.
+    // Se necesitarán pasar parámetros relacionados con:
+    //  1. La última página del paginado que el usuario ha visitado.
+    //  2. Un objeto EntityManagerInterface, para acceder a la información de la entidad 'Breweries'.
+    //  3. Un objeto SessionInterface, para acceder a la variable de sesión que almacenará la última página del paginado que el usuario ha visitado.
     #[Route('/breweries/{page?}', name: 'app_breweries')]
     public function breweries(?int $page, EntityManagerInterface $em, SessionInterface $session): Response
     {
         $BreweryData = $em->getRepository(Breweries::class);
         return $this->render('breweries.html.twig', [
+
+            // Al renderizar, le pasamos un array de tipo 'Breweries' con la información de todas las cervecerías registradas.
             'data' => $BreweryData->findAll(),
+            
+            // y, utilizando la función getLastPage que menciono más abajo y parametrizada con el parámetro de ruta y el objeto SessionInterface, le paso (y almaceno) la última página del paginado que el usuario ha visitado.
             "page" => $this->getLastPage($page, $session)
         ]);
     }
